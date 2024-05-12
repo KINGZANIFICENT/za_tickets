@@ -65,5 +65,5 @@ async def setup_menu(ctx, channel_id: int):
     else:
         await ctx.send("Invalid channel ID.")
 
-bot.run('MTIzOTEyNzM5NzcxMDgyMzQ1NQ.GI4bLg.WVVSN6N5ojdSETWz4C6BAMD3bo4CvzisLohPik') # your bot token here
+bot.run('your bot token here') # your bot token here
 
