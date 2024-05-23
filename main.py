@@ -1,12 +1,17 @@
+import logging
 import discord
 from discord.ext import commands
 from discord.ui import Button, View
 from discord import Intents
+import argparse
 
 intents = discord.Intents.default()
 intents.messages = True
 intents.guilds = True
 intents.reactions = True
+
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s (%(name)s) [%(levelname)s] %(message)s")
+logger = logging.getLogger("za_tickets")
 
 bot = commands.Bot(command_prefix='$', intents=Intents.all())
 
@@ -17,14 +22,21 @@ class TicketMenu(View):
 
 @bot.event
 async def on_ready():
-    print('Logged in as {0.user}'.format(bot))
+    logger.info('Logged in as {0.user}'.format(bot))
 
 @bot.event
 async def on_button_click(interaction):
-    print(f"Button interaction detected: {interaction.custom_id}")
+    logger.info(f"Button interaction detected: {interaction.custom_id}")
     if interaction.custom_id == "create_ticket":
         await interaction.response.send_message("Creating ticket...")
         await interaction.followup.send("Ticket created!")
+
+
+@bot.command()
+async def heartbeat(ctx):
+    logger.info("Za ticket Im Alive NIGGUH")
+    await ctx.send("check the console")
+
 
 @bot.command()
 async def create_ticket(ctx):
@@ -65,5 +77,8 @@ async def setup_menu(ctx, channel_id: int):
     else:
         await ctx.send("Invalid channel ID.")
 
-bot.run('your bot token here') # your bot token here
+parser = argparse.ArgumentParser()
+parser.add_argument("token", help="specify bot token to use")
+cmdline = parser.parse_args()
 
+bot.run(cmdline.token)
